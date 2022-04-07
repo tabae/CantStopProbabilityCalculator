@@ -1,0 +1,57 @@
+<html>
+    <head>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script>
+            $(function() {
+                $("#calc").on('click', function() {
+                   var dices = []
+                   var isValidValue = true;
+                   $("div#dice").find("input").each(function(i, ele){
+                       if($(ele).val() != '' && ($(ele).val() < 2 || $(ele).val() > 12)) {
+                           $(ele).val('');
+                           isValidValue = false;
+                        }
+                        if($(ele).val() != '') dices.push($(ele).val());
+                   }); 
+                   if(!isValidValue) {
+                       alert("2~12の間の数字を入れてください");
+                       return;
+                   }
+                   var res = 0.0;
+                   for(var a = 1; a <= 6; a++) {
+                       for(var b = 1; b <= 6; b++) {
+                           for(var c = 1; c <= 6; c++) {
+                               for(var d = 1; d <= 6; d++) {
+                                   var v = [a + b, a + c, a + d, b + c, b + d, c + d];
+                                   var ok = false;
+                                   for(var i = 0; i < v.length; i++) {
+                                       for(var j = 0; j < dices.length; j++) {
+                                           if(v[i] == dices[j]) {
+                                               ok = true;
+                                           }
+                                       }
+                                   }
+                                   if(ok) res += 1.0;
+                               }
+                           }
+                       }    
+                   }
+                   res /= 6.0**4;
+                   res *= 100.0;
+                   $("p#result").text(`確率は${res}%です`);
+                });
+            });
+        </script>
+    </head>
+    <body>
+        <h1>Can't Stop の確率計算機</h1>
+        <p>3つの出目のうちいずれか1つ以上を作れる確率を計算します．</p>
+        <div id="dice">
+            <p>出目1：<input type="number" min="2" max="12" value="6"></p>
+            <p>出目2：<input type="number" min="2" max="12" value="7"></p>
+            <p>出目3：<input type="number" min="2" max="12" value="8"></p>
+        </div>
+        <button id="calc">計算</button>
+        <p id="result"></p>
+    </body>
+</html>
